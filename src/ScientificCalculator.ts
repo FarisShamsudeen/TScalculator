@@ -1,6 +1,6 @@
 export class ScientificCalculator extends Calculator {
-    constructor(currentOperand: string, previousOperand: string) {
-        super(currentOperand, previousOperand);
+    constructor(previousOperandTextElement: HTMLElement, currentOperandTextElement: HTMLElement) {
+        super(previousOperandTextElement, currentOperandTextElement);
     }
 
     sin() {

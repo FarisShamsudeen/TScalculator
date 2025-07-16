@@ -2,11 +2,15 @@ class Calculator {
     protected currentOperand: string;
     protected previousOperand: string;
     protected operation: string | undefined;
+    private currentOperandTextElement: HTMLElement;
+    private previousOperandTextElement: HTMLElement;
 
-    constructor(currentOperand: string, previousOperand: string) {
-        this.currentOperand = currentOperand;
-        this.previousOperand = previousOperand;
-        this.clear();
+    constructor(previousOperandTextElement: HTMLElement, currentOperandTextElement: HTMLElement) {
+        this.currentOperandTextElement = currentOperandTextElement;
+        this.previousOperandTextElement = previousOperandTextElement;
+        this.currentOperand = '';
+        this.previousOperand = '';
+        this.operation = undefined;
     }
 
     clear() {
@@ -67,29 +71,32 @@ class Calculator {
         let integerDisplay: string;
         if (isNaN(integerDigits)) {
             integerDisplay = '';
-        } else {
+        }
+        else {
             integerDisplay = integerDigits.toLocaleString('en', { maximumFractionDigits: 0 });
         }
         if (decimalDigits != null) {
             return `${integerDisplay}.${decimalDigits}`;
-        } else {
+        }
+        else {
             return integerDisplay;
         }
     }
 
-    updateDisplay(previousOperandTextElement: HTMLElement, currentOperandTextElement: HTMLElement) {
-        currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
+    updateDisplay() {
+        this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
         if (this.operation != null) {
-            previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
-        } else {
-            previousOperandTextElement.innerText = '';
+            this.previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+        }
+        else {
+            this.previousOperandTextElement.innerText = '';
         }
     }
 }
 
 class ScientificCalculator extends Calculator {
-    constructor(currentOperand: string, previousOperand: string) {
-        super(currentOperand, previousOperand);
+    constructor(previousOperandTextElement: HTMLElement, currentOperandTextElement: HTMLElement) {
+        super(previousOperandTextElement, currentOperandTextElement);
     }
 
     sin() {
@@ -113,7 +120,8 @@ class ScientificCalculator extends Calculator {
     }
 
     power() {
-        if (this.currentOperand === '') return;
+        if (this.currentOperand === '')
+            return;
         if (this.previousOperand !== '') {
             this.compute();
         }
@@ -123,11 +131,11 @@ class ScientificCalculator extends Calculator {
     }
 
     compute() {
-        let computation: number;
+        let computation;
         const prev = parseFloat(this.previousOperand);
         const current = parseFloat(this.currentOperand);
-        if (isNaN(prev) || isNaN(current)) return;
-
+        if (isNaN(prev) || isNaN(current))
+            return;
         if (this.operation === '^') {
             computation = Math.pow(prev, current);
             this.currentOperand = computation.toString();
@@ -149,35 +157,37 @@ const previousOperandTextElement = document.querySelector<HTMLDivElement>('[data
 const currentOperandTextElement = document.querySelector<HTMLDivElement>('[data-current-operand]');
 
 // Initialize with a ScientificCalculator to include all functionalities
-const calculator = new ScientificCalculator(currentOperandTextElement!.innerText, previousOperandTextElement!.innerText);
+const calculator = new ScientificCalculator(previousOperandTextElement!, currentOperandTextElement!);
+
+calculator.updateDisplay(); // Initial display update
 
 numberButtons.forEach(button => {
     button.addEventListener('click', () => {
         calculator.appendNumber(button.innerText);
-        calculator.updateDisplay(previousOperandTextElement!, currentOperandTextElement!);
+        calculator.updateDisplay();
     });
 });
 
 operatorButtons.forEach(button => {
     button.addEventListener('click', () => {
         calculator.chooseOperation(button.innerText);
-        calculator.updateDisplay(previousOperandTextElement!, currentOperandTextElement!);
+        calculator.updateDisplay();
     });
 });
 
 equalsButton?.addEventListener('click', button => {
     calculator.compute();
-    calculator.updateDisplay(previousOperandTextElement!, currentOperandTextElement!);
+    calculator.updateDisplay();
 });
 
 allClearButton?.addEventListener('click', button => {
     calculator.clear();
-    calculator.updateDisplay(previousOperandTextElement!, currentOperandTextElement!);
+    calculator.updateDisplay();
 });
 
 deleteButton?.addEventListener('click', button => {
     calculator.delete();
-    calculator.updateDisplay(previousOperandTextElement!, currentOperandTextElement!);
+    calculator.updateDisplay();
 });
 
 scientificFunctionButtons.forEach(button => {
@@ -205,6 +215,6 @@ scientificFunctionButtons.forEach(button => {
             default:
                 return;
         }
-        calculator.updateDisplay(previousOperandTextElement!, currentOperandTextElement!);
+        calculator.updateDisplay();
     });
 });

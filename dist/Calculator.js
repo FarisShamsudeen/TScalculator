@@ -1,9 +1,10 @@
-"use strict";
-class Calculator {
-    constructor(currentOperand, previousOperand) {
-        this.currentOperand = currentOperand;
-        this.previousOperand = previousOperand;
-        this.clear();
+export class Calculator {
+    constructor(previousOperandTextElement, currentOperandTextElement) {
+        this.currentOperandTextElement = currentOperandTextElement;
+        this.previousOperandTextElement = previousOperandTextElement;
+        this.currentOperand = '';
+        this.previousOperand = '';
+        this.operation = undefined;
     }
     clear() {
         this.currentOperand = '';
@@ -72,13 +73,13 @@ class Calculator {
             return integerDisplay;
         }
     }
-    updateDisplay(previousOperandTextElement, currentOperandTextElement) {
-        currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
+    updateDisplay() {
+        this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
         if (this.operation != null) {
-            previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+            this.previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
         }
         else {
-            previousOperandTextElement.innerText = '';
+            this.previousOperandTextElement.innerText = '';
         }
     }
 }

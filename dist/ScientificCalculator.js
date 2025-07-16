@@ -1,7 +1,6 @@
-"use strict";
-class ScientificCalculator extends Calculator {
-    constructor(currentOperand, previousOperand) {
-        super(currentOperand, previousOperand);
+export class ScientificCalculator extends Calculator {
+    constructor(previousOperandTextElement, currentOperandTextElement) {
+        super(previousOperandTextElement, currentOperandTextElement);
     }
     sin() {
         this.currentOperand = Math.sin(parseFloat(this.currentOperand)).toString();

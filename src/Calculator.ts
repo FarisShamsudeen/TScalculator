@@ -2,11 +2,15 @@ export class Calculator {
     protected currentOperand: string;
     protected previousOperand: string;
     protected operation: string | undefined;
+    private currentOperandTextElement: HTMLElement;
+    private previousOperandTextElement: HTMLElement;
 
-    constructor(currentOperand: string, previousOperand: string) {
-        this.currentOperand = currentOperand;
-        this.previousOperand = previousOperand;
-        this.clear();
+    constructor(previousOperandTextElement: HTMLElement, currentOperandTextElement: HTMLElement) {
+        this.currentOperandTextElement = currentOperandTextElement;
+        this.previousOperandTextElement = previousOperandTextElement;
+        this.currentOperand = '';
+        this.previousOperand = '';
+        this.operation = undefined;
     }
 
     clear() {
@@ -77,12 +81,12 @@ export class Calculator {
         }
     }
 
-    updateDisplay(previousOperandTextElement: HTMLElement, currentOperandTextElement: HTMLElement) {
-        currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
+    updateDisplay() {
+        this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
         if (this.operation != null) {
-            previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+            this.previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
         } else {
-            previousOperandTextElement.innerText = '';
+            this.previousOperandTextElement.innerText = '';
         }
     }
 }
